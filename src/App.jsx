@@ -487,7 +487,7 @@ const Hero = () => {
               className="h-20 sm:h-50 md:h-50 w-auto"
             />
           </motion.div>
-        <h1 className={`text-5xl md:text-7xl lg:text-6xl font-black tracking-tighter text-gold-gradient`}>
+        <h1 className={`text-3xl md:text-7xl lg:text-6xl font-black tracking-tighter text-gold-gradient`}>
           SAIKOU SUSHI
         </h1>
         
@@ -1038,7 +1038,7 @@ const GoogleGLogo = ({ className }) => (
  * Layout interno centralizado.
  * CORRIGIDO: Trocada a técnica de 'mask' por 'div' aninhado para garantir a renderização.
  */
-const Reviews  = () => {
+const Reviews = () => {
   const scrollRef = useRef(null);
 
   const reviews = [
@@ -1104,6 +1104,7 @@ const Reviews  = () => {
   const handleScroll = (direction) => {
     const scrollContainer = scrollRef.current;
     if (scrollContainer) {
+      // Rola 90% da largura do container
       const scrollAmount = scrollContainer.offsetWidth * 0.9;
       scrollContainer.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
@@ -1119,20 +1120,24 @@ const Reviews  = () => {
       </SectionTitle>
       
       <div className="relative">
+        {/* BOTÃO ESQUERDA - MODIFICADO */}
         <button
           onClick={() => handleScroll('left')}
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-black/50 rounded-full text-white/70 hover:text-white hover:bg-black/80 transition-all duration-300 ease-in-out hidden md:flex"
+          className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-10 p-1 md:p-2 bg-black/50 rounded-full text-white/70 hover:text-white hover:bg-black/80 transition-all duration-300 ease-in-out flex"
           aria-label="Anterior"
         >
-          <ChevronLeft size={24} />
+          {/* Ícone menor no mobile, maior no desktop */}
+          <ChevronLeft size={20} className="md:w-6 md:h-6" />
         </button>
 
+        {/* BOTÃO DIREITA - MODIFICADO */}
         <button
           onClick={() => handleScroll('right')}
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-black/50 rounded-full text-white/70 hover:text-white hover:bg-black/80 transition-all duration-300 ease-in-out hidden md:flex"
+          className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-10 p-1 md:p-2 bg-black/50 rounded-full text-white/70 hover:text-white hover:bg-black/80 transition-all duration-300 ease-in-out flex"
           aria-label="Próximo"
         >
-          <ChevronRight size={24} />
+          {/* Ícone menor no mobile, maior no desktop */}
+          <ChevronRight size={20} className="md:w-6 md:h-6" />
         </button>
 
         <div
