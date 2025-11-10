@@ -1430,7 +1430,7 @@ const RodizioEmCasaSection  = () => {
         </div>
         
         <p className="text-lg sm:text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
-          O nosso rodízio premium do Saikou, agora no conforto do seu lar. Nosso combo "Rodízio em Casa" vem com 5 pratos selecionados e serve de 3 a 4 pessoas.
+          O nosso rodízio premium do Saikou, agora no conforto do seu lar. Nosso combo "Rodízio em Casa" vem com alguns pratos selecionados e serve de 3 a 4 pessoas.
         </p>
 
         <div className="flex flex-col sm:flex-row justify-center gap-5 w-full max-w-md sm:max-w-none">
