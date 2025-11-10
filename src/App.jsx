@@ -150,11 +150,17 @@ const WhatsAppIcon = (props) => (
   </svg>
 );
  
+const generateWhatsAppLinkRodizio = (phone, locationName) => {
+  const cleanPhone = phone.replace(/\D/g, '');
+  const fullPhone = cleanPhone.length === 11 ? `55${cleanPhone}` : cleanPhone;
+  const message = encodeURIComponent(`Olá! Gostaria de pedir um combo Rodizio em Casa.`);
+  return `https://wa.me/${fullPhone}?text=${message}`;
+};
 
 const generateWhatsAppLink = (phone, locationName) => {
   const cleanPhone = phone.replace(/\D/g, '');
   const fullPhone = cleanPhone.length === 11 ? `55${cleanPhone}` : cleanPhone;
-  const message = encodeURIComponent(`Olá! Gostaria de fazer uma reserva no ${locationName}.`);
+  const message = encodeURIComponent(`Olá! Gostaria de fazer uma reserva.`);
   return `https://wa.me/${fullPhone}?text=${message}`;
 };
 
@@ -177,7 +183,7 @@ const LocationChoiceButton = ({ href, name, delay }) => (
     <MessageCircle size={18} className="text-green-500" />
   </motion.a>
 );
-
+  
 /**
  * Componente Principal do Botão Flutuante de WhatsApp
  */
@@ -455,7 +461,7 @@ const Hero = () => {
     <section className="relative h-screen flex items-center justify-center text-center">
       {/* Vídeo de Fundo */}
       <video
-        src="SaikouVeleiros360.mp4"
+        src="SaikouDutra360.mp4"
         autoPlay
         loop
         muted
@@ -1276,13 +1282,13 @@ const videos360Data = [
   {
     id: 'dutra',
     name: 'Unidade Dutra - Tour 360º',
-    videoSrc: 'https://saikousushi.com.br/wp-content/uploads/2024/04/SaikouDutra360.mp4',
+    videoSrc: 'SaikouDutra360.mp4',
     posterSrc: 'https://saikousushi.com.br/wp-content/uploads/2024/04/Captura-de-Tela-2024-04-20-as-15.21.11.png',
   },
   {
     id: 'veleiros',
     name: 'Unidade Veleiros - Tour 360º',
-    videoSrc: 'https://saikousushi.com.br/wp-content/uploads/2024/04/SaikouVeleiros360.mp4',
+    videoSrc: 'SaikouVeleiros360.mp4',
     posterSrc: 'https://saikousushi.com.br/wp-content/uploads/2024/04/Captura-de-Tela-2024-04-20-as-15.21.29.png',
   },
 ];
@@ -1383,7 +1389,63 @@ const FACEBOOK_LINKS = [
     handle: 'saikoucidadedutra' 
   },
 ];
+const GoldButton = ({ href, children }) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="w-full sm:w-auto inline-block px-10 py-4 font-bold text-center text-gray-900 bg-[linear-gradient(145deg,_#FFDF70,_#d4af37,_#B8860B)] rounded-lg shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-yellow-300/50"
+  >
+    {children}
+  </a>
+);
 
+const GoldGradientText = ({ children, className = '' }) => (
+  <span 
+    className={`bg-[linear-gradient(145deg,_#FFDF70,_#B8860B,_#FFDF70)] bg-clip-text text-transparent drop-shadow-[0_2px_2px_rgba(0,0,0,0.2)] ${className}`}
+  >
+    {children}
+  </span>
+);
+const RodizioEmCasaSection  = () => {
+ const veleirosLinkRodizio = generateWhatsAppLinkRodizio(locationsData[0].phone, locationsData[0].name);
+  const dutraLinkRodizio = generateWhatsAppLinkRodizio(locationsData[1].phone, locationsData[1].name);
+  return (
+    <section className="w-full bg-black text-white py-20 md:py-28 font-['Inter']">
+      <div className="container mx-auto max-w-4xl px-6 text-center flex flex-col items-center">
+        
+        {/* A "Moldura" Dourada APENAS no título */}
+        <div className="w-full max-w-3xl p-1 rounded-xl bg-[linear-gradient(145deg,_#B8860B,_#FFDF70,_#B8860B)] shadow-2xl shadow-yellow-500/20 mb-12">
+          <div className="bg-black rounded-lg p-10 md:p-12">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight uppercase">
+              <GoldGradientText>
+                PEÇA SEU RODÍZIO SAIKOU
+              </GoldGradientText>
+              <br />
+              <span className="text-white">
+                EM CASA!
+              </span>
+            </h2>
+          </div>
+        </div>
+        
+        <p className="text-lg sm:text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
+          O nosso rodízio premium do Saikou, agora no conforto do seu lar. Nosso combo "Rodízio em Casa" vem com 5 pratos selecionados e serve de 3 a 4 pessoas.
+        </p>
+
+        <div className="flex flex-col sm:flex-row justify-center gap-5 w-full max-w-md sm:max-w-none">
+          <GoldButton href={veleirosLinkRodizio}>
+            Pedir na Unidade Veleiros
+          </GoldButton>
+          <GoldButton href={dutraLinkRodizio}>
+            Pedir na Unidade Dutra
+          </GoldButton>
+        </div>
+
+      </div>
+    </section>
+  );
+};
 // --- Helper Function ---
 /**
  * Cria um link de WhatsApp formatado a partir de um número de telefone.
@@ -1563,6 +1625,7 @@ export default function App() {
           <Locations />
           <Reviews />
           <Visualizacao360 />
+          <RodizioEmCasaSection />
           <Delivery />
         </main>
         <Footer />
