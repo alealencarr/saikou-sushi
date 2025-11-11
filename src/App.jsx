@@ -14,7 +14,7 @@ import {
   ArrowDownCircle,
   ArrowLeft, // Importado para o carrossel
   ArrowRight ,// Importado para o carrossel
-  ShoppingBag
+  ShoppingBag, Expand
 } from 'lucide-react';
 
 
@@ -96,9 +96,9 @@ const cardItemVariants = {
 // É importante ter os paths e dados corretos aqui.
 
 const CONTACT = { whatsapp: '5511999998888' };
-const CardapioNameDefault = 'cardapio.pdf';
+const CardapioNameDefault = 'Cardapio.pdf';
 const pdfUrl = CardapioNameDefault;
-const cardapioName = "Cardapio-Saikou-Sushi.pdf";
+const cardapioName = "Cardapio.pdf";
 const CardapioDestaque = [];
 
 // Adicionando alguns dados fictícios para nome e descrição
@@ -153,7 +153,7 @@ const WhatsAppIcon = (props) => (
 const generateWhatsAppLinkRodizio = (phone, locationName) => {
   const cleanPhone = phone.replace(/\D/g, '');
   const fullPhone = cleanPhone.length === 11 ? `55${cleanPhone}` : cleanPhone;
-  const message = encodeURIComponent(`Olá! Gostaria de pedir um combo Rodizio em Casa.`);
+  const message = encodeURIComponent(`Olá! Gostaria de pedir o rodízio premium em casa.`);
   return `https://wa.me/${fullPhone}?text=${message}`;
 };
 
@@ -1270,7 +1270,7 @@ const Delivery = () => (
             whileHover={{ scale: 1.05 }}
           >
             FAZER PEDIDO (Dutra)
-            <ExternalLink className="w-5 h-5 transition-colors duration-300" />
+             <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
           </motion.a>
         </div>
       </motion.div>
@@ -1394,7 +1394,7 @@ const GoldButton = ({ href, children }) => (
     href={href}
     target="_blank"
     rel="noopener noreferrer"
-    className="w-full sm:w-auto inline-block px-10 py-4 font-bold text-center text-gray-900 bg-[linear-gradient(145deg,_#FFDF70,_#d4af37,_#B8860B)] rounded-lg shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-yellow-300/50"
+    className="w-full sm:w-auto inline-block px-5 py-4 font-bold text-center text-gray-900 bg-[linear-gradient(145deg,_#FFDF70,_#d4af37,_#B8860B)] rounded-lg shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-yellow-300/50"
   >
     {children}
   </a>
@@ -1407,41 +1407,162 @@ const GoldGradientText = ({ children, className = '' }) => (
     {children}
   </span>
 );
-const RodizioEmCasaSection  = () => {
+const rodizioImages = [
+  // Imagem 1: Capa
+  'RodizioImg1.jpg',
+  // Imagem 2: Informações
+  'RodizioImg2.jpg'
+];
+
+const ImageLightbox = ({ imageUrl, onClose }) => {
+  return (
+    <div 
+      className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
+      onClick={onClose} // Fecha ao clicar no fundo
+    >
+      {/* Botão de Fechar (Canto) */}
+      <button 
+        className="absolute top-5 right-5 text-white z-20 bg-black/50 rounded-full p-2"
+        onClick={onClose}
+      >
+        <X size={32} />
+      </button>
+      
+      {/* Container da Imagem */}
+      <div 
+        className="relative max-w-full max-h-full"
+        onClick={(e) => e.stopPropagation()} // Impede que o clique na imagem feche o modal
+      >
+        <img 
+          src={imageUrl} 
+          alt="Rodízio Premium - Imagem Expandida" 
+          className="block max-h-[90vh] max-w-[90vw] object-contain rounded-lg" 
+        />
+      </div>
+    </div>
+  );
+};
+
+
+// --- [ COMPONENTE DE CARROSSEL DE IMAGEM (CORRIGIDO) ] ---
+// Corrigi 'h-100' (inválido) para 'h-80' para bater com o 'sm:h-80'
+const ImageCarousel = ({ onExpandClick }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const prevSlide = () => {
+    const isFirstSlide = currentIndex === 0;
+    const newIndex = isFirstSlide ? rodizioImages.length - 1 : currentIndex - 1;
+    setCurrentIndex(newIndex);
+  };
+
+  const nextSlide = () => {
+    const isLastSlide = currentIndex === rodizioImages.length - 1;
+    const newIndex = isLastSlide ? 0 : currentIndex + 1;
+    setCurrentIndex(newIndex);
+  };
+
+  return (
+    // Corrigi 'h-100' para 'h-80'
+    <div className="w-full max-w-xl mx-auto h-80 md:h-96 relative group rounded-lg overflow-hidden shadow-lg shadow-black/30 border-2 border-yellow-800/30 mb-5">
+      {/* Imagem de Fundo */}
+      <div
+        style={{ backgroundImage: `url(${rodizioImages[currentIndex]})` }}
+        className="w-full h-full bg-center bg-cover duration-500"
+      ></div>
+      
+      {/* Seta Esquerda (CORRIGIDO) */}
+      <div className="absolute top-1/2 -translate-y-1/2 left-3 text-white cursor-pointer p-2 bg-black/30 rounded-full opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+        <ChevronLeft size={28} onClick={prevSlide} />
+      </div>
+      {/* Seta Direita (CORRIGIDO) */}
+      <div className="absolute top-1/2 -translate-y-1/2 right-3 text-white cursor-pointer p-2 bg-black/30 rounded-full opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+        <ChevronRight size={28} onClick={nextSlide} />
+      </div>
+
+      {/* Botão de Expandir (CORRIGIDO) */}
+      <div 
+        className="absolute top-3 right-3 text-white cursor-pointer p-2 bg-black/30 rounded-full opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
+        onClick={() => onExpandClick(rodizioImages[currentIndex])} // Chama a nova prop
+      >
+        <Expand size={24} />
+      </div>
+
+      {/* Bolinhas de Navegação */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+        {rodizioImages.map((_, slideIndex) => (
+          <div
+            key={slideIndex}
+            onClick={() => setCurrentIndex(slideIndex)}
+            className={`w-3 h-3 rounded-full cursor-pointer transition-all ${
+              currentIndex === slideIndex ? 'bg-white scale-110' : 'bg-gray-500/50'
+            }`}
+          ></div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// --- [ A SUA SEÇÃO (COM A LÓGICA DE DUPLICAÇÃO) ] ---
+const RodizioEmCasaSection = () => {
  const veleirosLinkRodizio = generateWhatsAppLinkRodizio(locationsData[0].phone, locationsData[0].name);
   const dutraLinkRodizio = generateWhatsAppLinkRodizio(locationsData[1].phone, locationsData[1].name);
+
+  // NOVO: State para o Lightbox
+  const [lightboxImage, setLightboxImage] = useState(null);
+  const handleExpandClick = (imageUrl) => setLightboxImage(imageUrl);
+  const closeLightbox = () => setLightboxImage(null);
+
   return (
     <section className="w-full bg-black text-white py-20 md:py-28 font-['Inter']">
-      <div className="container mx-auto max-w-4xl px-6 text-center flex flex-col items-center">
+      {/* NOVO: Renderiza o Lightbox se uma imagem estiver selecionada */}
+      {lightboxImage && (
+        <ImageLightbox imageUrl={lightboxImage} onClose={closeLightbox} />
+      )}
+      <div className="container mx-auto max-w-6xl px-6">
         
-        {/* A "Moldura" Dourada APENAS no título */}
-        <div className="w-full max-w-3xl p-1 rounded-xl bg-[linear-gradient(145deg,_#B8860B,_#FFDF70,_#B8860B)] shadow-2xl shadow-yellow-500/20 mb-12">
-          <div className="bg-black rounded-lg p-10 md:p-12">
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight uppercase">
-              <GoldGradientText>
-                PEÇA SEU RODÍZIO SAIKOU
-              </GoldGradientText>
-              <br />
-              <span className="text-white">
-                EM CASA!
-              </span>
-            </h2>
+        {/* AQUI ESTÁ A MÁGICA: O layout de 2 colunas SÓ no PC */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 items-center">
+          
+          {/* === COLUNA 1: IMAGEM (SÓ PC) === */}
+          {/* Esta div aparece em telas grandes (lg) e fica escondida no celular */}
+          <div className="hidden lg:flex lg:items-center lg:justify-center">
+            <ImageCarousel onExpandClick={handleExpandClick} />
+          </div>
+
+          {/* === COLUNA 2: CONTEÚDO (TEXTO + IMAGEM NO CELULAR) === */}
+          {/* Esta é a sua coluna que já estava perfeita no celular */}
+          <div className="flex flex-col text-center lg:text-center items-center lg:items-start">
+            
+            {/* 1. TÍTULO (Aparece sempre) */}
+            <div className="w-full max-w-3xl p-1 rounded-xl bg-[linear-gradient(145deg,_#B8860B,_#FFDF70,_#B8860B)] shadow-2xl shadow-yellow-500/20 mb-10">
+              <div className="bg-black rounded-lg p-8 md:p-10">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight uppercase">
+                  <GoldGradientText>PEÇA SEU RODÍZIO PREMIUM</GoldGradientText>
+                  <br />
+                  <span className="text-white">EM CASA!</span>
+                </h2>
+              </div>
+            </div>
+
+            {/* 2. IMAGEM (SÓ CELULAR) */}
+            {/* Esta div aparece no celular (bloco) e some em telas grandes (lg:hidden) */}
+            <div className="w-full lg:hidden">
+              <ImageCarousel onExpandClick={handleExpandClick} />
+            </div>
+            
+            {/* 3. TEXTO (Aparece sempre) */}
+            <p className="text-lg sm:text-xl text-gray-300 mb-10 max-w-2xl">
+              O nosso rodízio premium do Saikou tem <strong>60 itens</strong>, você pode <strong>pedir agora</strong> no conforto do seu lar.
+            </p>
+
+            {/* 4. BOTÕES (Aparece sempre) */}
+            <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-5 w-full max-w-md sm:max-w-none">
+              <GoldButton href={veleirosLinkRodizio}>Pedir - Unidade Veleiros</GoldButton>
+              <GoldButton href={dutraLinkRodizio}>Pedir - Unidade Dutra</GoldButton>
+            </div>
           </div>
         </div>
-        
-        <p className="text-lg sm:text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
-          O nosso rodízio premium do Saikou, agora no conforto do seu lar. Nosso combo "Rodízio em Casa" vem com alguns pratos selecionados e serve de 3 a 4 pessoas.
-        </p>
-
-        <div className="flex flex-col sm:flex-row justify-center gap-5 w-full max-w-md sm:max-w-none">
-          <GoldButton href={veleirosLinkRodizio}>
-            Pedir na Unidade Veleiros
-          </GoldButton>
-          <GoldButton href={dutraLinkRodizio}>
-            Pedir na Unidade Dutra
-          </GoldButton>
-        </div>
-
       </div>
     </section>
   );
