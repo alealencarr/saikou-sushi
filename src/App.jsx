@@ -16,9 +16,10 @@ import {
   ArrowRight ,// Importado para o carrossel
   ShoppingBag, Expand
 } from 'lucide-react';
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
-
-import { ChevronLeft,  Download, ExternalLink, MessageCircle } from 'lucide-react';
+import { ChevronLeft,  Download, ExternalLink, MessageCircle, 
+  ZoomIn, ZoomOut, RefreshCcw } from 'lucide-react';
 
 import { ChefHat, Sparkle, Wind } from 'lucide-react'; // Ícones para os destaques
   const PATHS = { 
@@ -1420,32 +1421,73 @@ const ImageLightbox = ({ imageUrl, onClose }) => {
       className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
       onClick={onClose} // Fecha ao clicar no fundo
     >
-      {/* Botão de Fechar (Canto) */}
+      {/* Botão de Fechar (Canto) - Aumentei o z-index */}
       <button 
-        className="absolute top-5 right-5 text-white z-20 bg-black/50 rounded-full p-2"
+        className="absolute top-5 right-5 text-white z-[60] bg-black/50 rounded-full p-2"
         onClick={onClose}
       >
         <X size={32} />
       </button>
       
-      {/* Container da Imagem */}
-      <div 
-        className="relative max-w-full max-h-full"
-        onClick={(e) => e.stopPropagation()} // Impede que o clique na imagem feche o modal
+      {/* Wrapper do Zoom/Pan */}
+      <TransformWrapper
+        initialScale={1}
+        limitToBounds={true} // Não deixa "arrastar" para fora
+        doubleClick={{ mode: 'zoomIn' }} // Double click dá zoom
+        wheel={{ step: 0.2 }} // Zoom com scroll
+        pinch={{ step: 0.1 }} // Zoom com pinça
       >
-        <img 
-          src={imageUrl} 
-          alt="Rodízio Premium - Imagem Expandida" 
-          className="block max-h-[90vh] max-w-[90vw] object-contain rounded-lg" 
-        />
-      </div>
+        {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
+          <React.Fragment>
+            
+            {/* Controles de Zoom (Botões) */}
+            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-[60] flex gap-2">
+              <button 
+                onClick={(e) => { e.stopPropagation(); zoomIn(); }} 
+                className="text-white bg-black/50 rounded-full p-3 transition-transform hover:scale-110"
+              >
+                <ZoomIn size={24} />
+              </button>
+              <button 
+                onClick={(e) => { e.stopPropagation(); zoomOut(); }} 
+                className="text-white bg-black/50 rounded-full p-3 transition-transform hover:scale-110"
+              >
+                <ZoomOut size={24} />
+              </button>
+              <button 
+                onClick={(e) => { e.stopPropagation(); resetTransform(); }} 
+                className="text-white bg-black/50 rounded-full p-3 transition-transform hover:scale-110"
+              >
+                <RefreshCcw size={24} />
+              </button>
+            </div>
+
+            {/* Container da Imagem (que agora pode dar zoom) */}
+            <div 
+              className="relative max-w-full max-h-full"
+              onClick={(e) => e.stopPropagation()} // Impede que o clique na imagem feche o modal
+            >
+              <TransformComponent
+                // Essas classes ajudam a manter o layout correto
+                wrapperClass="!w-full !h-full"
+                contentClass="!w-full !h-full"
+              >
+                <img 
+                  src={imageUrl} 
+                  alt="Rodízio Premium - Imagem Expandida" 
+                  className="block max-h-[90vh] max-w-[90vw] object-contain rounded-lg" 
+                />
+              </TransformComponent>
+            </div>
+          </React.Fragment>
+        )}
+      </TransformWrapper>
     </div>
   );
 };
 
 
-// --- [ COMPONENTE DE CARROSSEL DE IMAGEM (CORRIGIDO) ] ---
-// Corrigi 'h-100' (inválido) para 'h-80' para bater com o 'sm:h-80'
+// --- [ COMPONENTE DE CARROSSEL DE IMAGEM (O SEU CÓDIGO) ] ---
 const ImageCarousel = ({ onExpandClick }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -1462,7 +1504,7 @@ const ImageCarousel = ({ onExpandClick }) => {
   };
 
   return (
-    // Corrigi 'h-100' para 'h-80'
+    // Corrigi 'h-100' para 'h-80' (já estava no seu código, mantive)
     <div className="w-full max-w-xl mx-auto h-80 md:h-96 relative group rounded-lg overflow-hidden shadow-lg shadow-black/30 border-2 border-yellow-800/30 mb-5">
       {/* Imagem de Fundo */}
       <div
@@ -1503,7 +1545,7 @@ const ImageCarousel = ({ onExpandClick }) => {
   );
 };
 
-// --- [ A SUA SEÇÃO (COM A LÓGICA DE DUPLICAÇÃO) ] ---
+// --- [ A SUA SEÇÃO (O SEU CÓDIGO) ] ---
 const RodizioEmCasaSection = () => {
  const veleirosLinkRodizio = generateWhatsAppLinkRodizio(locationsData[0].phone, locationsData[0].name);
   const dutraLinkRodizio = generateWhatsAppLinkRodizio(locationsData[1].phone, locationsData[1].name);
@@ -1532,7 +1574,8 @@ const RodizioEmCasaSection = () => {
 
           {/* === COLUNA 2: CONTEÚDO (TEXTO + IMAGEM NO CELULAR) === */}
           {/* Esta é a sua coluna que já estava perfeita no celular */}
-          <div className="flex flex-col text-center lg:text-center items-center lg:items-start">
+          {/* AQUI: Mudei para lg:text-left para o texto alinhar no PC */}
+          <div className="flex flex-col text-center lg:text-left items-center lg:items-start">
             
             {/* 1. TÍTULO (Aparece sempre) */}
             <div className="w-full max-w-3xl p-1 rounded-xl bg-[linear-gradient(145deg,_#B8860B,_#FFDF70,_#B8860B)] shadow-2xl shadow-yellow-500/20 mb-10">
