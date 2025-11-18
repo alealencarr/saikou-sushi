@@ -7,7 +7,7 @@ export const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
-  useEffect(() => {
+  useEffect(() => { 
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
