@@ -2,7 +2,7 @@
 
   export const PATHS = { 
   drinks: 'https://placehold.co/400x600/1a1a1a/555?text=Drink+' ,
-  images: 'VELEIROS-1-1024x687.png', // Placeholder
+  images: '2dutrafachada.png', // Placeholder
   food: 'https://placehold.co/800x600/222/888?text=Prato+' };
 
 export const dataCardapio = 
@@ -38,7 +38,7 @@ export  const locationsData = [
       name: 'SAIKOU VELEIROS',
       address: 'Praça Nicolau Aranha Pachêco, 64 – Jardim Ipanema, São Paulo – SP, 04784-280',
       phone: '(11) 96927-7577',
-      img: 'VELEIROS-1-1024x687.png',
+      img: 'veleirosfachada.png',
       mapLink: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('Praça Nicolau Aranha Pachêco, 64 – Jardim Ipanema, São Paulo – SP, 04784-280')}`,
       videos: [
       "/videos/veleiros/video1.mp4",  
@@ -53,7 +53,7 @@ export  const locationsData = [
       name: 'SAIKOU DUTRA',
       address: 'Rua Padre José Garzotti, 342 – Cidade Dutra, São Paulo – SP, 04806-000',
       phone: '(11) 93334-4060',
-      img: 'DUTRA-1-1024x687.png',
+      img: 'dutrafachada.png',
       mapLink: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('Rua Padre José Garzotti, 342 – Cidade Dutra, São Paulo – SP, 04806-000')}`,
       videos: [
       "/videos/dutra/video1.mp4",  
